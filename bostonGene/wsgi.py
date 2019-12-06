@@ -1,5 +1,5 @@
 """
-WSGI config for boston_gene project.
+WSGI config for bostonGene project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'boston_gene.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bostonGene.settings')
 
 application = get_wsgi_application()

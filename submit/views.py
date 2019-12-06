@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from .models import Task
+from .tasks import task_get_md5_hash
 from django.views import View
 
 
@@ -15,8 +16,6 @@ def submit(request):
         return JsonResponse(data={'status': 400,
                                   'message': 'Bad parameters'}, status=400)
     else:
-        if email:
-            task = Task.objects.create(url=url, email=email)
-        else:
-            task = Task.objects.create(url=url)
+        task = Task.objects.create(url=url, email=email)
+        task_get_md5_hash.delay(task.id, url, email)
         return JsonResponse({'id': task.id})
