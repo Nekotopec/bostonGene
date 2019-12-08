@@ -41,7 +41,6 @@ def check(request):
 def submit(request):
     """ View to submit task."""
 
-
     url = request.POST.get('url')
     email = request.POST.get('email')
     if not url:

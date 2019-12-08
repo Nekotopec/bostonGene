@@ -11,7 +11,10 @@ from bostonGene.settings import EMAIL_HOST_USER
 
 def get_file_from_url(url):
     """ Generator that returns chunks of file from response."""
-    req = requests.get(url, stream=True)
+    try:
+        req = requests.get(url, stream=True)
+    except requests.ConnectionError:
+        return False
     if req.status_code == 200:
         for chunk in req.iter_content(1024):
             yield chunk
@@ -50,7 +53,15 @@ def task_get_md5_hash(task_id, url, email):
     # Getting md5 sum of file.
     hash_md5 = None
     chunk_generator = get_file_from_url(url)
-    if chunk_generator:
+
+    # Check success of request.
+    try:
+        chunk = next(chunk_generator)
+        hash_md5 = get_md5_sum(hash_md5=hash_md5, chunk=chunk)
+    except StopIteration:
+        chunk = False
+
+    if chunk:
         for chunk in chunk_generator:
             hash_md5 = get_md5_sum(hash_md5=hash_md5, chunk=chunk)
         hash_md5 = hash_md5.hexdigest()

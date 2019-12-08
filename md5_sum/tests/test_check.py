@@ -1,5 +1,3 @@
-import pytest
-
 
 class TestCheck:
 
@@ -13,7 +11,7 @@ class TestCheck:
         assert response['status'] == task.status
 
     def test_get_nonexistent_task(self, client):
-        """ Try to get task nonexistent task.
+        """ Try to get status of nonexistent task.
         Expect 404 status code
         """
 

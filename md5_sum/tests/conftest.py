@@ -34,3 +34,14 @@ def created_task(db):
     task = Task.objects.create(url=url)
     yield task
     task.delete()
+
+
+@pytest.fixture(scope='function')
+def bad_task(db):
+    """ Create bad task with nonexistent url."""
+    url = 'http://some/bad/url/tralalal'
+    task = Task.objects.create(url=url)
+
+    yield task
+
+    task.delete()

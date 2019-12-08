@@ -1,6 +1,4 @@
-from django.test import TestCase, override_settings
 from unittest.mock import patch
-import pytest
 
 
 # Create your tests here.
