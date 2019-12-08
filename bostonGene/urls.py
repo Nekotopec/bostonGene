@@ -18,6 +18,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('submit/', include('submit.urls')),
-    path('check/', include('check.urls')),
+    path('', include('md5_sum.urls')),
 ]

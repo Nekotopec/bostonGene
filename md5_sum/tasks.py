@@ -4,7 +4,7 @@ import smtplib
 
 from bostonGene.celery import app
 from django.core.mail import send_mail
-from submit.models import Task
+from md5_sum.models import Task
 
 from bostonGene.settings import EMAIL_HOST_USER
 
@@ -26,6 +26,22 @@ def get_md5_sum(hash_md5, chunk):
     hash_md5.update(chunk)
     return hash_md5
 
+
+def send_email(email, task_id, hash_md5):
+    """ Send email to current email."""
+    try:
+        send_mail('Md5_sum',
+                  (f'''Task with id={task_id} has been completed 
+                   md5_sum = {hash_md5}'''),
+                  EMAIL_HOST_USER,
+                  [email],
+                  fail_silently=False,
+                  )
+    except smtplib.SMTPException as ex:
+        print(ex.args)
+        print('Message has not been sent.')
+
+
 @app.task
 def task_get_md5_hash(task_id, url, email):
     """ Performance of the task of getting md5 sum."""
@@ -46,14 +62,4 @@ def task_get_md5_hash(task_id, url, email):
 
     # Sending email to user.
     if email:
-        try:
-            send_mail('Md5_sum',
-                      (f'''Task with id={task_id} has been completed 
-                       md5_sum = {hash_md5}'''),
-                      EMAIL_HOST_USER,
-                      [email],
-                      fail_silently=False,
-                      )
-        except smtplib.SMTPException as ex:
-            print(ex.args)
-            print('Message has not been sent.')
+        send_email(email, task_id, hash_md5)

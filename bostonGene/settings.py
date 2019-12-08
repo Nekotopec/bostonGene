@@ -38,8 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'submit',
-    'check',
+    'md5_sum',
     'django_celery_results',
     'django.core.mail'
 ]
