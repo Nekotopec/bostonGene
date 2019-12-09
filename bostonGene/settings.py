@@ -109,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -123,7 +123,7 @@ USE_TZ = True
 
 
 # Celery settings
-CELERY_BROKER_URL = 'amqp://bostongene:bostongene@localhost:5672/bostongene'
+CELERY_BROKER_URL = 'amqp://bostongene:bostongene@rabbitmq:5672/bostongene'
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_CACHE_BACKEND = 'django-cache'
 

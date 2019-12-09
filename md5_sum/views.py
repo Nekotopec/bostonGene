@@ -3,6 +3,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from md5_sum.models import Task
 from .tasks import task_get_md5_hash
+from django.core.exceptions import ValidationError
 
 
 @require_http_methods(["GET"])
@@ -19,6 +20,11 @@ def check(request):
                     'message': f'Task with id={id} does not exist.'}
             return JsonResponse(data=data,
                                 status=404)
+        except ValidationError:
+            data = {'status': 400,
+                    'message': f'Id={id} is not a valid UUID.'}
+            return JsonResponse(data=data,
+                                status=400)
 
         status = task.status
         if status == Task.DONE:

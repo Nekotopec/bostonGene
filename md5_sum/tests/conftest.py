@@ -1,13 +1,7 @@
+import os
+import requests
 import pytest
 from md5_sum.models import Task
-
-
-@pytest.fixture(scope='session')
-def celery_config():
-    return {
-        'broker_url': 'amqp://',
-        'result_backend': 'rpc',
-    }
 
 
 @pytest.fixture(autouse=True)
@@ -45,3 +39,32 @@ def bad_task(db):
     yield task
 
     task.delete()
+
+
+@pytest.fixture(scope='function')
+def patch_request(monkeypatch):
+    class MockResponse:
+        def __init__(self, status_code):
+            self.status_code = status_code
+
+        @staticmethod
+        def iter_content(chunk_size):
+            image_path = os.path.join(
+                os.path.dirname(__file__),
+                'static/kitty.jpg',
+            )
+            with open(image_path, 'rb') as f:
+                while True:
+                    data = f.read(chunk_size)
+                    if not data:
+                        break
+                    yield data
+
+    def _wrap(status=200):
+
+        def mock_get(*args, **kwargs):
+            return MockResponse(status)
+
+        monkeypatch.setattr(requests, 'get', mock_get)
+
+    yield _wrap

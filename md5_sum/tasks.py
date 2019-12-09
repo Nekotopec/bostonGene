@@ -14,12 +14,14 @@ def get_file_from_url(url):
     try:
         req = requests.get(url, stream=True)
     except requests.ConnectionError:
-        return False
+        return
     if req.status_code == 200:
         for chunk in req.iter_content(1024):
+            if not chunk:
+                break
             yield chunk
     else:
-        return False
+        return
 
 
 def get_md5_sum(hash_md5, chunk):
@@ -30,12 +32,13 @@ def get_md5_sum(hash_md5, chunk):
     return hash_md5
 
 
-def send_email(email, task_id, hash_md5):
+def send_email(email, task_id, status, hash_md5):
     """ Send email to current email."""
     try:
         send_mail('Md5_sum',
-                  (f'''Task with id={task_id} has been completed 
-                   md5_sum = {hash_md5}'''),
+                  (f''' Task with id={task_id} has been completed.
+                    This task has status: {status}.
+                    md5_sum = {hash_md5}'''),
                   EMAIL_HOST_USER,
                   [email],
                   fail_silently=False,
@@ -48,8 +51,8 @@ def send_email(email, task_id, hash_md5):
 @app.task
 def task_get_md5_hash(task_id, url, email):
     """ Performance of the task of getting md5 sum."""
-    task = Task.objects.get(id=task_id)
 
+    task = Task.objects.get(id=task_id)
     # Getting md5 sum of file.
     hash_md5 = None
     chunk_generator = get_file_from_url(url)
@@ -66,11 +69,13 @@ def task_get_md5_hash(task_id, url, email):
             hash_md5 = get_md5_sum(hash_md5=hash_md5, chunk=chunk)
         hash_md5 = hash_md5.hexdigest()
         task.md5_sum = hash_md5
-        task.status = Task.DONE
+        status = Task.DONE
+        task.status = status
     else:
-        task.status = Task.FAIL
+        status = Task.FAIL
+        task.status = status
     task.save()
 
     # Sending email to user.
     if email:
-        send_email(email, task_id, hash_md5)
+        send_email(email, task_id, status, hash_md5)
