@@ -10,13 +10,13 @@ How to install?
 
 2 Clone this repository.
 
-.. code-block: bash
+.. code-block:: bash
    
    git clone https://github.com/Nekotopec/bostonGene.git
 
 3 Go to project directory.
 
-.. code-block: bash
+.. code-block:: bash
    
    cd bostonGene/
 
