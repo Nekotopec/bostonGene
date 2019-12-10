@@ -13,6 +13,7 @@ services:
     depends_on:
       - celery_worker
     restart: always
+    entrypoint: /entrypoint.sh
   rabbitmq:
     build:
       context: .

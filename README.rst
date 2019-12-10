@@ -1,3 +1,7 @@
+Task
+****
+.. image:: https://github.com/Nekotopec/bostonGene/raw/master/image/task.jpg
+
 
 How to install?
 ***************
@@ -20,13 +24,13 @@ How to install?
    
    cd bostonGene/
 
-4 Create a container
+4 Create a container.
 
 .. code-block:: bash
 
    docker-compose build
 
-5 Run
+5 Run.
 
 .. code-block:: bash
 
@@ -34,13 +38,13 @@ How to install?
    
 It will give you a server on address localhost:8000
 
-To see running containers use
+To see running containers use:
 
 .. code-block:: bash
 
    docker-compose ps
 
-To stop proxy_py use
+To stop it use:
 
 .. code-block:: bash
 

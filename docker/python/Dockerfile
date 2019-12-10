@@ -9,5 +9,8 @@ COPY ./bostonGene /code/bostonGene
 COPY ./md5_sum /code/md5_sum
 COPY manage.py /code
 COPY pytest.ini /code
+COPY docker/python/entrypoint.sh /
+RUN chmod +x ../entrypoint.sh
 RUN pytest -x -v
+
 
